@@ -74,7 +74,7 @@ btsname <-c("RM", "Jin", "suga","jhope", "jimin", "V", "JK")
 btsyear <-c(1994, 1992, 1993, 1994, 1995, 1995, 1997)
 btsposition <-c("rap", "vocal", "rap", "rap", "vocal", "vocal","vocal")
 bts <-data.frame(btsname, btsyear, btsposition)
-bts
+bts   
 str(bts)
 
 bts <-data.frame(btsname, btsyear, btsposition, stringsAsFactors = TRUE)
@@ -85,6 +85,19 @@ str(bts)
 gender=factor(c("male", "female", "female", "male"))
 gender
 str(gender)
-gender=factor(gender, levels=c("male", "female"))
+gender=factor(gender, 
+              levels=c("male", "female"))
 gender
 str(gender)
+
+#dataframe 활용
+#변수 선택 $표시 활용
+bts$btsname
+bts$age <- 2021-bts$btsyear+1
+bts
+bts$null <-NULL
+bts
+bts$na <-NA
+
+
+dim(bts)
