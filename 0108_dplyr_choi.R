@@ -7,6 +7,10 @@
 ########dplyr(데이터 전처리)###########
 #######################################
 
+
+#scalr#vector#list#array#data.frame#c#rbind#cbind#$
+
+
 install.packages("dplyr")
 library(dplyr)
 
