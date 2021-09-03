@@ -20,6 +20,7 @@
 print("Hello world!")
 #모든 계산 가능
 1*2
+3*4
 2/4
 
 #변수(variable) 만들기
