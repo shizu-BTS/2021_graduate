@@ -1,0 +1,12 @@
+﻿names,score,score2,edu,employment,type
+A,100,"1,000",elementry,unemployed,1
+B,90,"1,303",middle,employed,2
+C,80,900,high,employed,3
+D,86,800,high,employed,2
+E,77,750,middle,employed,2
+F,89,990,middle,employed,3
+G,80,"1,110",elementry,employed,3
+H,86,"1,400",elementry,unemployed,2
+I,78,890,middle,unemployed,2
+J,59,876,high,unemployed,1
+K,97,765,high,unemployed,1
