@@ -3,6 +3,8 @@
 #######################################
 
 
+
+
 #######################################
 ########dplyr(데이터 전처리)###########
 #######################################
@@ -10,7 +12,7 @@
 
 #scalr#vector#list#array#data.frame#c#rbind#cbind#$
 
-
+installpackages()
 install.packages("dplyr")
 library(dplyr)
 
@@ -35,6 +37,19 @@ x %>%
   mean() %>%
   sqrt()
 
+#특정함수에 대한 도움말 참조
+help(abs)
+
+## 숫자형 벡터 처리 함수
+# abs(x) : 절대값
+# sqrt(x) : 제곱근
+# ceiling(x) : x보다 크거나 같은 정수
+# floor(x) : x보다 작서나 같은 정수
+# truc(x) : 소숫점 이하 절삭
+# round(x, digits=n) : 소수점 n자리로 반올림
+# log(s, base=n) :밑이 n인 log 
+# exp(x) : 지수 변환
+# factorial(x) : factorial(3! = 3*2*1)
 
 
 ### 3.dplyr의 주요 기능  #######################################################
@@ -49,16 +64,21 @@ library(nycflights13)
 head(flights) # head 자료 수개를 보여줌
 flight_df <-data.frame(flights) #data frame으로 변환
 #시작하기 전에 데이터구조 파악 필수! : 데이터가 336776개, 19개의 변수가 있는 비행기 출도착 관련
-
-
+str(flight_df)
 ##month=2인 자료만 subset
 flight_df %>% 
   filter(month==2) %>%
-  head(5)   ##데이터가 너무 기니까 앞에 5개만 print
+  count(month)##데이터가 너무 기니까 앞에 5개만 print
+
+flight_df %>% 
+  filter(month==2) %>%
+  count(month)##month 자료만 봄으로서 filtering 여부를 확인
+
 
 ##month=2 or day=1  자료만 subset
 flight_df %>% 
-  filter(month==2 | day==1) %>%  #shift+\
+  filter(month==2 | day==1) %>% #shift+\
+  head(5)
 
 ##month=2 and day=1  자료만 subset
 flight_df %>% 
@@ -66,11 +86,11 @@ flight_df %>%
 
 ##month=2가 아닌 자료만 subset
 flight_df %>% 
-  filter(month!=2) %>%  #느낌표는 not의 의미, 등호는 한번만 쓰는것을 주의
+  filter(month!=2) %>%  #느낌표는 not의 의미(!+=), 등호는 한번만 쓰는것을 주의
 
 ##month가 5이상인 자료만 subset
 flight_df %>% 
-  filter(month >=5) %>%  
+  filter(month >=5) %>%  #  >+=
 
 ##month가 5, 7, 10인 자료만(복수의 조건) subset
 flight_df %>% 
@@ -96,12 +116,13 @@ filter_flight_df <-
 ##month, day 변수만 선택해서 저장
 select_flight_df<-
   flight_df %>%
-  select(month, day)
-  
+  select(month, day) %>% 
+  str(select_flight_df)
 ##year에서 day까지의 변수만 선택해서 저장 (연속변수 선택)
 select_flight_df<-
   flight_df %>%
-  select(year:day)
+  select(year:day) %>% 
+  str(select_flight_df)
 
 ##year에서 day까지의 변수만 제외해서 선택해서 저장 
 select_flight_df<-
@@ -149,7 +170,7 @@ flight_df %>%
          ratio_delay=arr_delay/(hour*60+minute))
 
 #ifelse를 활용하여 category변수 생성
-flight_df %>%
+ flight_df %>%
   mutate(arr_delay_group=ifelse(arr_delay>0, "delay", "no delay"))
 
 
@@ -189,6 +210,33 @@ flight_df %>%
             mean=mean(arr_delay), 
             med=median(arr_delay), 
             per20=quantile(arr_delay, 0,25))->final
+final
+
+##summarise : 요약통계량 계산
+#mean(x,na.rm=TRUE) : 결측값제외하고 평균
+#median(x,na.rm=TRUE) : 중앙값
+#sd(x,na.rm=TRUE) : 표준편차
+#min(x,na.rm=TRUE) : 최솟값
+#max(x,na.rm=TRUE) : 최대값
+#IQR(x,na.rm=TRUE) : 사분위수 : Q3-Q1
+#sum(x,na.rm=TRUE) : 합
+
+#n() 관측치 개수 계산, x변수 입력 하지 않음
+#n_disinct(x) : 중복없는 유일한 관측치 개수 계산
+###실습######
+mutate1_flight_df %>% 
+  group_by(arr_delay_group) %>% 
+  summarise(n=n())
+
+mutate1_flight_df %>% 
+  filter(!is.na(arr_delay)) %>% 
+  group_by(arr_delay_group) %>% 
+  summarise(n=n())
+##rename : 변수 이름 변경
+str(mutate1_flight_df)
+mutate2_flight_df<- rename(mutate1_flight_df, destination=dest)
+str(mutate2_flight_df)
+
 
 ### 3.6. 마치며  ######################################################
 

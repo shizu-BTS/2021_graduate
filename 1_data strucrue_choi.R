@@ -33,6 +33,13 @@ a
 a<-c(3,5)
 a
 
+##R에서 쓰이는 변수 유형
+#numeric (real or decimal): 2, 2.0, pi
+#character : "a", "work"
+#complex : 1+4i
+#logical : true of false
+#integer : special case of numeric dat without decimals 
+
 #scalar, vector, array, list, dataframe의 이해
 #scalar: 하나의 원소(element)
 scalar<-1
