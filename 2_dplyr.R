@@ -120,20 +120,23 @@ flight_df %>%
 ##month, day 변수만 선택해서 저장
 select_flight_df<-
   flight_df %>%
-  select(month, day) %>% 
-  str(select_flight_df)
+  select(month, day)
+
+str(select_flight_df)
 
 
 ##year에서 day까지의 변수만 선택해서 저장 (연속변수 선택)
 select_flight_df<-
   flight_df %>%
-  select(year:day) %>% 
-  str(select_flight_df)
+  select(year:day) 
+
+str(select_flight_df)
 
 ##year에서 day까지의 변수만 제외해서 선택해서 저장 
 select_flight_df<-
   flight_df %>%
   select(! year:day) #year~day 까지 변수 제외하고 선택
+str(select_flight_df)
 
 select_flight_df<-
   flight_df %>%
@@ -171,6 +174,7 @@ arrange_flight_df<-
 ##mutate는 새로운 변수를 만들어줌(파생변수(derived variables)생성)
 
 #연산을 통해 새로운 변수 생성
+
 flight_df %>%
   mutate(mean_distance=distance/hour, 
          ratio_delay=arr_delay/(hour*60+minute))
@@ -186,6 +190,7 @@ mutate_flight_df<-
   flight_df %>%
   mutate(arr_delay_group=ifelse(arr_delay>0, "delay", "no delay"))
 
+str(mutate_flight_df)
 
 #별도 저장은 마지막에 써도 가능(화살표는 반대, logic을 생각하면 직관적 이해 가능)
 flight_df %>%
