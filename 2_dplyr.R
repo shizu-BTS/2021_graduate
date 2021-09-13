@@ -9,10 +9,7 @@
 ########dplyr(데이터 전처리)###########
 #######################################
 
-
-#scalr#vector#list#array#data.frame#c#rbind#cbind#$
-
-installpackages()
+install.packages()
 install.packages("dplyr")
 library(dplyr)
 
@@ -24,7 +21,7 @@ library(dplyr)
 
 ### 2.chain operator, %>%  #####################################################
 ##dplyr의 강점은 chain operator를 사용하여 코드를 심플하게 짤수 있다는 점
-##chain operatr는 "and then"의 문법과 같이 의미로 사용. 원래는 괄호()가 이 기능수행
+##chain operator는 "and then"의 문법과 같이 의미로 사용. 원래는 괄호()가 이 기능수행
 ##직관적인 코딩을 가능하게 하며, 소괄호 갯수 실수를 줄일 수 있음
 ##단축어: ctrl+shif+M 
 
@@ -33,9 +30,10 @@ x<-c(30, 20, 10, 0)
 sqrt(mean(abs(x)))
 ##chain oeprator 사용시 (X를 가져오고 and then, absolute value산출 and then~~~)
 x %>% 
-  abs() %>%
-  mean() %>%
+  abs() %>% 
+  mean() %>% 
   sqrt()
+  
 
 #특정함수에 대한 도움말 참조
 help(abs)
@@ -44,10 +42,10 @@ help(abs)
 # abs(x) : 절대값
 # sqrt(x) : 제곱근
 # ceiling(x) : x보다 크거나 같은 정수
-# floor(x) : x보다 작서나 같은 정수
+# floor(x) : x보다 작거나 같은 정수
 # truc(x) : 소숫점 이하 절삭
-# round(x, digits=n) : 소수점 n자리로 반올림
-# log(s, base=n) :밑이 n인 log 
+# round(x, digits=3) : 소수점 n자리로 반올림
+# log(x, base=n) :밑이 n인 log 
 # exp(x) : 지수 변환
 # factorial(x) : factorial(3! = 3*2*1)
 
@@ -59,20 +57,23 @@ help(abs)
 
 
 ##분석에 앞서서 R 내장 데이터를 불러오자
+
 install.packages("nycflights13")
 library(nycflights13)
+
 head(flights) # head 자료 수개를 보여줌
 flight_df <-data.frame(flights) #data frame으로 변환
 #시작하기 전에 데이터구조 파악 필수! : 데이터가 336776개, 19개의 변수가 있는 비행기 출도착 관련
 str(flight_df)
+
+
+
 ##month=2인 자료만 subset
 flight_df %>% 
-  filter(month==2) %>%
-  count(month)##데이터가 너무 기니까 앞에 5개만 print
+  filter(month==2) %>% 
+  count(month)
 
-flight_df %>% 
-  filter(month==2) %>%
-  count(month)##month 자료만 봄으로서 filtering 여부를 확인
+table(flight_df$month)
 
 
 ##month=2 or day=1  자료만 subset
@@ -82,15 +83,15 @@ flight_df %>%
 
 ##month=2 and day=1  자료만 subset
 flight_df %>% 
-  filter(month==2, day==1) %>%  #쉼표나 & 모두 사용 가능
+  filter(month==2, day==1)  #쉼표나 & 모두 사용 가능
 
 ##month=2가 아닌 자료만 subset
 flight_df %>% 
-  filter(month!=2) %>%  #느낌표는 not의 의미(!+=), 등호는 한번만 쓰는것을 주의
+  filter(month!=2)  #느낌표는 not의 의미(!+=), 등호는 한번만 쓰는것을 주의
 
 ##month가 5이상인 자료만 subset
 flight_df %>% 
-  filter(month >=5) %>%  #  >+=
+  filter(month >=5)   #  >+=   
 
 ##month가 5, 7, 10인 자료만(복수의 조건) subset
 flight_df %>% 
@@ -109,6 +110,9 @@ filter_flight_df <-
   flight_df %>% 
   filter(month %in% c(5,7,10)) ##filter_flight_df(no of cases 87110으로 줄은 것을 확인)
 
+flight_df %>% 
+  filter(month %in% c(5,7,10))->flight_df_filter
+
 ### 3.2.select #######################################################
 ##select는 특정 변수를 선택하는 기능(열(colomn) 선택)
 ##즉 dataset을 종으로 절단하는 기능
@@ -118,6 +122,8 @@ select_flight_df<-
   flight_df %>%
   select(month, day) %>% 
   str(select_flight_df)
+
+
 ##year에서 day까지의 변수만 선택해서 저장 (연속변수 선택)
 select_flight_df<-
   flight_df %>%

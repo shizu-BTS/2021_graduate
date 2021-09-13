@@ -200,7 +200,7 @@ ggplot(chickFlick, aes(film, arousal, fill = gender ))+
 
 ##(학생실습과제) chickFlick 자료, x축 film, y축 arousal.
 ### 1) 막대 그래프(막내 내부는 흰색, 테두리는 검은색) + 오차 막대 errorbar 형태, mean_cl_normal로 오차 표현, 오차막대 빨간색상으로, 너비는 0.2)
-### 2) 막대 그래프(막내 내부는 흰색, 테두리는 검은색) + 오차 막대 errorbar 형태, mean_cl_boot로 오차 표현, 오차막대 빨간색상으로, 너비는 0.2)
+### 2) 막대 그래프(막내 내부는 흰색, 테두리는 검은색) + 오차 막대 errorbar 형태, mean_cl_boot로 오차 표현,  오차막대 빨간색상으로, 너비는 0.2)
 
 
 #--------Line Charts------------------------------------------

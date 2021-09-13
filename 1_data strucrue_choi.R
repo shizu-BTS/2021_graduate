@@ -17,6 +17,7 @@
 #ctrl+enter 누르면 console 창에 출력, 여러줄 선택해서 run도 가능
 #함수는 yellow로 표시, 괄호 안에 함수에 넣을 것을 지정
 #comment를 쓸때는 앞에 #을 삽입
+print("hello world!")
 print("Hello world!")
 #모든 계산 가능
 1*2
@@ -29,13 +30,14 @@ a<-2
 a
 a<-3
 a
+
 #concatenate의 약자 c, 연결의 의미
 a<-c(3,5)
 a
 
 ##R에서 쓰이는 변수 유형
 #numeric (real or decimal): 2, 2.0, pi
-#character : "a", "work"
+#character : "a", "work", "1"
 #complex : 1+4i
 #logical : true of false
 #integer : special case of numeric dat without decimals 
@@ -54,16 +56,18 @@ vector <-c("v", "rm", "suga")
 vector
 
 #matrix : 2*2, 2*3의 행렬 (vector를 여러개의 row로 쌓은형태)
+
 matrix <-matrix(c(1,2,3,4,5,6), nrow=3)
 matrix
 matrix <-matrix(c(1,2,3,4,5,6), nrow=2)
 matrix
 matrix <-matrix(c(1,2,3,4,5,6), nrow=2, byrow=TRUE)
 matrix
-matrix <-matrix(c(1:20), nrow=4, ncol=5)
-matrix
+matrix <-matrix(c(1:20), nrow=4, ncol=5, byrow=TRUE)
+matrix  
 mat1 <-c(1:3)
 mat2 <-c(4:6)
+
 matrix<-c(mat1, mat2)
 matrix
 matrix <-cbind(mat1, mat2)  #cbind : column을 기준으로 횡으로 붙이기
@@ -106,12 +110,14 @@ str(bts)
 
 #factor의 이해
 #factor란 주로 categorical한 변수로서 "값"(일반벡터)에 "level"이라는 정보를 추가한 것
+
 gender=factor(c("male", "female", "female", "male"))
 gender
 str(gender)
 
 
 ##level의 순서를 바꾸고 싶거나, referece group 설정을 위해서는 leves=c() 사용
+
 gender=factor(gender, 
               levels=c("male", "female"))
 gender
@@ -123,6 +129,7 @@ bts$btsname
 bts$btsposition
 bts$btsposition=factor(btsposition, levels=c("vocal", "rap"))
 bts$btsposition
+
 bts$age <- 2021-bts$btsyear+1
 bts
 bts$null <-NULL
@@ -140,11 +147,11 @@ bts
 bts[1,5]<-3
 bts[2,5]<-5
 bts[3,5]<-1
-mean(bts$na)
+mean(bts$na,na.rm = TRUE)
 
 bts[1,4]<-NA    #대괄호는 indexing, [row, column] 순서를 기억하자
 mean(bts$age)
-mean(bts$age, na.rm=TRUE)
+mean(bts$na, na.rm=TRUE)
 bts
 
 
