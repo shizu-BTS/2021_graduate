@@ -175,9 +175,23 @@ ggplot(festivalData2, aes(gender, day1))+
 
 
 
-#--------Bar Charts----------
+#--------Bar Charts(stat_summary)
 
 chickFlick = read.delim("ChickFlick.dat",  header = TRUE)
+
+ggplot(chickFlick, aes(film, arousal))+
+  geom_point()+
+  labs(x = "Film", y = "Mean Arousal") 
+
+ggplot(chickFlick, aes(film, arousal))+
+  geom_boxplot()+
+  labs(x = "Film", y = "Mean Arousal") 
+
+ggplot(chickFlick, aes(film, arousal))+
+  stat_summary(fun.y = mean, geom = "bar", fill = "white", colour = "Black")+
+  geom_point()+
+  labs(x = "Film", y = "Mean Arousal") 
+
 
 ggplot(chickFlick, aes(film, arousal))+
   stat_summary(fun.y = mean, geom = "bar", fill = "White", colour = "Black") + 
@@ -189,15 +203,21 @@ ggplot(chickFlick, aes(film, arousal, fill = gender ))+
   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.90), width = 0.2) + 
   labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
+ggplot(chickFlick, aes(film, arousal, fill = gender ))+
+  stat_summary(fun.y = mean, geom = "bar", position="dodge") +#positionn=dodge: 집단에 따라 그래프를 분리
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.50), width = 0.5) + 
+  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
  ggplot(chickFlick, aes(film, arousal, fill = film))+
    stat_summary(fun.y = mean, geom = "bar") + 
    stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) + 
-   facet_wrap(~gender) + 
+   facet_wrap(~gender) + #facet_wrap(~) : 변수로 감싸주는 방식으로 그래프 분리
    labs(x = "Film", y = "Mean Arousal") + 
-   theme(legend.position="none")
+   theme(legend.position="none")##theme : legend, axis, panel 등 다양한 옵션 변경 가능
+ 
 
 
+ 
 ##(학생실습과제) chickFlick 자료, x축 film, y축 arousal.
 ### 1) 막대 그래프(막내 내부는 흰색, 테두리는 검은색) + 오차 막대 errorbar 형태, mean_cl_normal로 오차 표현, 오차막대 빨간색상으로, 너비는 0.2)
 ### 2) 막대 그래프(막내 내부는 흰색, 테두리는 검은색) + 오차 막대 errorbar 형태, mean_cl_boot로 오차 표현,  오차막대 빨간색상으로, 너비는 0.2)
@@ -207,14 +227,20 @@ ggplot(chickFlick, aes(film, arousal, fill = gender ))+
 
 hiccupsData <- read.delim("Hiccups.dat",  header = TRUE)
 hiccups<-stack(hiccupsData)
+str(hiccups)
 names(hiccups)<-c("Hiccups","Intervention")
+
+bts$btsposition=factor(btsposition, levels=c("vocal", "rap"))
+hiccups$Intervention=factor(hiccups$Intervention, levels=c("Carotid", "Rectum", "Tongue", "Baseline"))
+str(hiccups)
 hiccups$Intervention_Factor<-factor(hiccups$Intervention, levels(hiccups$Intervention)[c(1, 4, 2, 3)])
+str(hiccups)
 
 
 line <- ggplot(hiccups,  aes(Intervention_Factor, Hiccups))
 line + stat_summary(fun.y = mean, geom = "point") + stat_summary(fun.y = mean, geom = "line", aes(group = 1),colour = "Red", linetype = "dashed") + stat_summary(fun.data = mean_cl_boot, geom = "errorbar", width = 0.2) + labs(x = "Intervention", y = "Mean Number of Hiccups")
 
-## textdata로 추가 실ㅅ
+## textdata로 추가 실습
 
 textData <- read.delim("TextMessages.dat",  header = TRUE)
 textData$id = row(textData[1])
