@@ -175,15 +175,18 @@ arrange_flight_df<-
 
 #연산을 통해 새로운 변수 생성
 
+str(flight_df)
+
 flight_df %>%
   mutate(mean_distance=distance/hour, 
-         ratio_delay=arr_delay/(hour*60+minute))
+         ratio_delay=arr_delay/(hour*60+minute)) -> flght_df_mutate
 
 #ifelse를 활용하여 category변수 생성
  flight_df %>%
   mutate(arr_delay_group=ifelse(arr_delay>0, "delay", "no delay"))
-
-
+         
+ 
+ 
 #별도 저장을 하지 않으면 명령어 실행시에만 변수가 생성됨
 #별도 저장을 하는 명령어를 추가해야 함
 mutate_flight_df<-
@@ -210,6 +213,8 @@ mutate1_flight_df %>%
             med=median(arr_delay), 
             per20=quantile(arr_delay, 0,25))
             
+
+table(flight_df$arr_delay)
 #missing 값이 있어서 제대로 그루핑이 안되고 있음을 확인. filter를 통해 na 값을 없애고 분석해보자
 
 flight_df %>%
@@ -238,6 +243,10 @@ final
 mutate1_flight_df %>% 
   group_by(arr_delay_group) %>% 
   summarise(n=n())
+
+mutate1_flight_df %>% 
+  group_by(arr_delay_group) %>% 
+  summarise(countofarrdelaygroup=n())
 
 mutate1_flight_df %>% 
   filter(!is.na(arr_delay)) %>% 

@@ -9,7 +9,6 @@
 ###########   ggplot2    ##############
 #######################################
 
-#scalar#vector#list#array#data.frame#c#rbind#cbind#$#mean#na.rm=TRUE
 
 ######Initiate packages
 
@@ -23,18 +22,32 @@ library(reshape)
 library(plyr)
 library(dplyr)
 
+##작업공간 설정하기 : r project 사용하지 않는 경우만 ####
+
+getwd()
+setwd("C:\\Users\\shizu\\stat_2020")
+
+
 #--------Scatterplots----------
 
 examData <- read.delim("Exam Anxiety.dat",  header = TRUE)
 names(examData)
 str(examData)
 
+a<-ggplot(examData, aes(Anxiety, Exam))
+a+geom_point()
+
+a<-ggplot(examData, aes(Anxiety, Exam))+
+  geom_point()
+
+
 #Simple scatter
-scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))
-scatter + geom_point()
+scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))+
+  geom_point()
+scatter
 
 scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))
-scatter + geom_point(shape=24, size=1, colour="black")
+scatter + geom_point(shape=5, size=1, colour="black")
 
 #plot symbol(points)
 help(pch)
@@ -78,17 +91,16 @@ scatter +
 
 ##집단별 층위를 나누어서 산포도를 그릴때
 
-scatter <- ggplot(examData, aes(x=Anxiety, y=Exam))
-scatter + 
+scatter <- ggplot(examData, aes(x=Anxiety, y=Exam))+
   geom_point() + 
   facet_grid(Gender~.)+
   labs(x = "Exam Anxiety", y = "Exam Performance %") + 
   ggtitle("exam anxiety")
 
 #Simple scatter with smooth/ 
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + geom_point() + 
-  geom_smooth() + 
+scatter <- ggplot(examData, aes(Anxiety, Exam))+
+  geom_point() + 
+  geom_smooth() +  # 데이터를 잘설명할 수 있는 smooth line 생성
   labs(x = "Exam Anxiety", y = "Exam Performance %")+ 
   ggtitle("exam anxiety")
 
@@ -109,10 +121,10 @@ scatter + geom_point() +
   labs(x = "Exam Anxiety", y = "Exam Performance %") 
 
 
-#Simple scatter with regression line + coloured CI
+#Simple scatter with regression line + coloured CI (alpha=transparancy)
 scatter <- ggplot(examData, aes(Anxiety, Exam))
 scatter + geom_point() + 
-  geom_smooth(method = "lm", colour = "Red", alpha = 0.1, fill = "Red") + 
+  geom_smooth(method = "lm", colour = "Red", fill="Red", alpha = 0.1) + 
   labs(x = "Exam Anxiety", y = "Exam Performance %") 
 
 
@@ -141,7 +153,7 @@ festivalHistogram <-
 
 #1 outlier cased떄문에 그래프가 이상한걸 확인
 festivalData %>% 
-  arrange(-day1) ->festvalDara_a
+  arrange(-day1) ->festvalData_a
 
 
 festivalData2 = read.delim("DownloadFestival(No Outlier).dat",  header = TRUE)
@@ -154,8 +166,10 @@ ggplot(festivalData2, aes(day1))+
 festivalDensity <- ggplot(festivalData2, aes(day1))
 festivalDensity + geom_density() + labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
 
-#집단별로 색깔 다르게, alhpha=투명도
-festivalDensity + geom_density(aes(fill = gender), alpha = 0.5) + labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
+#집단별로 색깔 다르게, alpha=투명도
+ggplot(festivalData2, aes(day1)) + 
+  geom_density(aes(fill = gender), alpha = 0.3) + 
+  labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
 
 #--------BOXPLOTS----------
 
@@ -181,21 +195,21 @@ chickFlick = read.delim("ChickFlick.dat",  header = TRUE)
 
 ggplot(chickFlick, aes(film, arousal))+
   geom_point()+
-  labs(x = "Film", y = "Mean Arousal") 
+  labs(x = "Film", y = "Arousal") 
 
 ggplot(chickFlick, aes(film, arousal))+
   geom_boxplot()+
-  labs(x = "Film", y = "Mean Arousal") 
+  labs(x = "Film", y = "Arousal") 
 
 ggplot(chickFlick, aes(film, arousal))+
-  stat_summary(fun.y = mean, geom = "bar", fill = "white", colour = "Black")+
+  stat_summary(fun.y = mean, geom = "bar", fill = "pink", colour = "Black")+
   geom_point()+
-  labs(x = "Film", y = "Mean Arousal") 
+  labs(x = "Film", y = "Arousal") 
 
 
 ggplot(chickFlick, aes(film, arousal))+
   stat_summary(fun.y = mean, geom = "bar", fill = "White", colour = "Black") + 
-  stat_summary(fun.data = mean_cl_normal, geom = "pointrange") +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar") +
   labs(x = "Film", y = "Mean Arousal") 
 
 ggplot(chickFlick, aes(film, arousal, fill = gender ))+
@@ -205,7 +219,7 @@ ggplot(chickFlick, aes(film, arousal, fill = gender ))+
 
 ggplot(chickFlick, aes(film, arousal, fill = gender ))+
   stat_summary(fun.y = mean, geom = "bar", position="dodge") +#positionn=dodge: 집단에 따라 그래프를 분리
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.50), width = 0.5) + 
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
   labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
  ggplot(chickFlick, aes(film, arousal, fill = film))+
