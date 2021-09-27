@@ -28,11 +28,15 @@ getwd()
 setwd("C:\\Users\\shizu\\stat_2020")
 
 
-#--------Scatterplots----------
+#--------Scatterplots----------#two variables, continuous
 
 examData <- read.delim("Exam Anxiety.dat",  header = TRUE)
 names(examData)
 str(examData)
+
+ggplot(examData, aes(Anxiety, Exam))+
+  geom_point()
+
 
 a<-ggplot(examData, aes(Anxiety, Exam))
 a+geom_point()
@@ -40,14 +44,19 @@ a+geom_point()
 a<-ggplot(examData, aes(Anxiety, Exam))+
   geom_point()
 
+aes(Anxiety, Exam, colour=Gender)
 
 #Simple scatter
 scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))+
   geom_point()
 scatter
 
-scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))
-scatter + geom_point(shape=5, size=1, colour="black")
+scatter <- ggplot(examData, aes(Anxiety, Exam))
+scatter + geom_point(shape=19, size=1, colour="black")
+
+scatter <- ggplot(examData, aes(Anxiety, Exam, colour=Gender))
+scatter + geom_point(shape=19, size=1)
+
 
 #plot symbol(points)
 help(pch)
@@ -56,8 +65,9 @@ help(pch)
 
 
 #Simple scatter / labs(x=“x축 이름”, y=“y축이름“) /ggtitle("title")
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + 
+
+
+ggplot(examData, aes(Anxiety, Exam))+ 
   geom_point() + 
   labs(x = "Exam Anxiety", y = "Exam Performance %") + 
   ggtitle("exam anxiety")
@@ -82,23 +92,36 @@ scatter +
   labs(x = "Exam Anxiety", y = "Exam Performance %") + 
   ggtitle("exam anxiety")
 
+##aes(변수명)는 해당 graph 그리는데 각각 삽입해서 사용도 가능
+ggplot(examData, aes(x=Anxiety, y=Exam))+
+  geom_point(aes(colour=Gender)) + 
+  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
+  ggtitle("exam anxiety")
+
 ##집단별 모양을 달리한 scatter plot
-scatter <- ggplot(examData, aes(x=Anxiety, y=Exam, shape=Gender))
-scatter + 
+ggplot(examData, aes(x=Anxiety, y=Exam, shape=Gender))+
   geom_point() + 
   labs(x = "Exam Anxiety", y = "Exam Performance %") + 
   ggtitle("exam anxiety")
 
+ggplot(examData, aes(x=Anxiety, y=Exam))+
+  geom_point(aes(shape=Gender)) + 
+  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
+  ggtitle("exam anxiety")
+
+
+
+
 ##집단별 층위를 나누어서 산포도를 그릴때
 
-scatter <- ggplot(examData, aes(x=Anxiety, y=Exam))+
+ggplot(examData, aes(x=Anxiety, y=Exam))+
   geom_point() + 
   facet_grid(Gender~.)+
   labs(x = "Exam Anxiety", y = "Exam Performance %") + 
   ggtitle("exam anxiety")
 
 #Simple scatter with smooth/ 
-scatter <- ggplot(examData, aes(Anxiety, Exam))+
+ggplot(examData, aes(Anxiety, Exam))+
   geom_point() + 
   geom_smooth() +  # 데이터를 잘설명할 수 있는 smooth line 생성
   labs(x = "Exam Anxiety", y = "Exam Performance %")+ 
@@ -106,14 +129,13 @@ scatter <- ggplot(examData, aes(Anxiety, Exam))+
 
 
 #Simple scatter with regression line(red)
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + 
+ggplot(examData, aes(Anxiety, Exam))+
   geom_point() + 
-  geom_smooth(method = "lm", colour = "Red", se = F) + 
+  geom_smooth(method = "lm", colour = "Red", se = F) + #se=standard error(표준오차)
   labs(x = "Exam Anxiety", y = "Exam Performance %") 
 
 
-#Simple scatter with regression line(red)+ CI
+#Simple scatter with regression line(red)+ CI(confidential interval(신뢰구간))
 
 scatter <- ggplot(examData, aes(Anxiety, Exam))
 scatter + geom_point() + 
@@ -133,6 +155,11 @@ scatter + geom_point() +
 scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))
 scatter + geom_point() + geom_smooth(method = "lm", aes(fill = Gender), alpha = 0.1) + labs(x = "Exam Anxiety", y = "Exam Performance %", colour = "Gender") 
 
+ggplot(examData, aes(Anxiety, Exam))+ 
+  geom_point(aes(colour=Gender)) + 
+  geom_smooth(method = "lm", aes(fill = Gender), alpha = 0.1) + 
+  labs(x = "Exam Anxiety", y = "Exam Performance %", colour = "Gender") 
+
 ##(학생실습과제)
 ##"FacebookNarcissism.dat" 자료로 NPQC_R_Total(X축), Rating(y축)의 산포도 그리기
 ## 1) 산포도 그리기(Rating_Type에 따라 색상 다르게)
@@ -144,9 +171,10 @@ scatter + geom_point() + geom_smooth(method = "lm", aes(fill = Gender), alpha = 
 ##Load the data file into R. This is a tab-delimited file hence use of read.delim
 
 festivalData <- read.delim("DownloadFestival.dat",  header = TRUE)
+str(festivalData)
+
 ##Histogram with Outlier
-festivalHistogram <- 
-  ggplot(festivalData, aes(day1)) + 
+ggplot(festivalData, aes(day1)) + 
   labs(legend.position="none")+ 
   geom_histogram(binwidth = 0.4) + 
   labs(x = "Hygiene (Day 1 of Festival)", y = "Frequency")
@@ -163,8 +191,9 @@ ggplot(festivalData2, aes(day1))+
   labs(x="Hygiene of Day 1", y="Frequency")
 
 #Density without outlier(추가)
-festivalDensity <- ggplot(festivalData2, aes(day1))
-festivalDensity + geom_density() + labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
+ggplot(festivalData2, aes(day1))+
+  geom_density() +
+  labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
 
 #집단별로 색깔 다르게, alpha=투명도
 ggplot(festivalData2, aes(day1)) + 
@@ -173,8 +202,9 @@ ggplot(festivalData2, aes(day1)) +
 
 #--------BOXPLOTS----------
 
-festivalBoxplot <- ggplot(festivalData, aes(gender, day1))
-festivalBoxplot + geom_boxplot() + labs(x = "Gender", y = "Hygiene (Day 1 of Festival)")
+ggplot(festivalData, aes(gender, day1))+
+  geom_boxplot() + 
+  labs(x = "Gender", y = "Hygiene (Day 1 of Festival)")
 
 #with outlier removed
 
@@ -192,7 +222,7 @@ ggplot(festivalData2, aes(gender, day1))+
 #--------Bar Charts(stat_summary)
 
 chickFlick = read.delim("ChickFlick.dat",  header = TRUE)
-
+str(chickFlick)
 ggplot(chickFlick, aes(film, arousal))+
   geom_point()+
   labs(x = "Film", y = "Arousal") 
@@ -250,7 +280,7 @@ str(hiccups)
 hiccups$Intervention_Factor<-factor(hiccups$Intervention, levels(hiccups$Intervention)[c(1, 4, 2, 3)])
 str(hiccups)
 
-
+410000000211224
 line <- ggplot(hiccups,  aes(Intervention_Factor, Hiccups))
 line + stat_summary(fun.y = mean, geom = "point") + stat_summary(fun.y = mean, geom = "line", aes(group = 1),colour = "Red", linetype = "dashed") + stat_summary(fun.data = mean_cl_boot, geom = "errorbar", width = 0.2) + labs(x = "Intervention", y = "Mean Number of Hiccups")
 

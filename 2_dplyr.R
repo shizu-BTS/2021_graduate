@@ -60,7 +60,7 @@ help(abs)
 
 install.packages("nycflights13")
 library(nycflights13)
-
+library(dplyr)
 head(flights) # head 자료 수개를 보여줌
 flight_df <-data.frame(flights) #data frame으로 변환
 #시작하기 전에 데이터구조 파악 필수! : 데이터가 336776개, 19개의 변수가 있는 비행기 출도착 관련
@@ -177,11 +177,13 @@ arrange_flight_df<-
 
 str(flight_df)
 
+mutate(newVriableName=operationsOfOldVariables)
 flight_df %>%
   mutate(mean_distance=distance/hour, 
          ratio_delay=arr_delay/(hour*60+minute)) -> flght_df_mutate
 
 #ifelse를 활용하여 category변수 생성
+#ifelse(조건, 조건이 true일때, 조건이 false)
  flight_df %>%
   mutate(arr_delay_group=ifelse(arr_delay>0, "delay", "no delay"))
          
@@ -189,6 +191,8 @@ flight_df %>%
  
 #별도 저장을 하지 않으면 명령어 실행시에만 변수가 생성됨
 #별도 저장을 하는 명령어를 추가해야 함
+
+ 
 mutate_flight_df<-
   flight_df %>%
   mutate(arr_delay_group=ifelse(arr_delay>0, "delay", "no delay"))
@@ -211,7 +215,7 @@ mutate1_flight_df %>%
             min=min(arr_delay), 
             mean=mean(arr_delay), 
             med=median(arr_delay), 
-            per20=quantile(arr_delay, 0,25))
+            per25=quantile(arr_delay, 0,25))
             
 
 table(flight_df$arr_delay)
@@ -240,8 +244,10 @@ final
 #n() 관측치 개수 계산, x변수 입력 하지 않음
 #n_disinct(x) : 중복없는 유일한 관측치 개수 계산
 ###실습######
-mutate1_flight_df %>% 
-  group_by(arr_delay_group) %>% 
+flight_df %>% 
+  filter(!is.na(arr_delay)) %>%  #na가 아닌 row만 표시
+  mutate(arr_delay_group=ifelse(arr_delay>0, "delay", "no delay")) %>% 
+  group_by(arr_delay_group) %>%
   summarise(n=n())
 
 mutate1_flight_df %>% 
@@ -253,6 +259,8 @@ mutate1_flight_df %>%
   group_by(arr_delay_group) %>% 
   summarise(n=n())
 ##rename : 변수 이름 변경
+rename(dfname, newariable=oldarialbe)
+
 str(mutate1_flight_df)
 mutate2_flight_df<- rename(mutate1_flight_df, destination=dest)
 str(mutate2_flight_df)
