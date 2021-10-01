@@ -252,6 +252,25 @@ ggplot(chickFlick, aes(film, arousal, fill = gender ))+
   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
   labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
+
+ggplot(chickFlick, aes(film, arousal, fill = gender ))+
+  stat_summary(fun.y = mean, geom = "bar", position="dodge") +#positionn=dodge: 집단에 따라 그래프를 분리
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
+  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
+
+##ggplot 안에 aes(colour=gender)를 두었을때와 외부에 두었을때의 차이
+ggplot(chickFlick, aes(film, arousal))+
+  stat_summary(fun.y = mean, geom = "bar", aes(fill=gender), position="dodge") +#position=dodge: 집단에 따라 그래프를 분리
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
+  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
+
+ggplot(chickFlick, aes(film, arousal))+
+  stat_summary(f un.y = mean, geom = "bar", aes(fill=gender), position="dodge") +#position=dodge: 집단에 따라 그래프를 분리
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", aes(line=gender), position=position_dodge(width=0.9), width = 0.1) + 
+  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
+
+
+
  ggplot(chickFlick, aes(film, arousal, fill = film))+
    stat_summary(fun.y = mean, geom = "bar") + 
    stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) + 

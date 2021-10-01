@@ -12,6 +12,7 @@
 install.packages()
 install.packages("dplyr")
 library(dplyr)
+install.packages("tidyverse")
 
 ### 1.dplyr소개   ##############################################################
 ##주로 데이터 전처리 과정에서 자주 사용
