@@ -14,6 +14,11 @@ install.packages("dplyr")
 library(dplyr)
 install.packages("tidyverse")
 
+install.packages(c("ggplot2", "tibble", "tidyr", "readr", "purrr", "dplyr", "stringr", "forcats"))
+library(tibble)
+install.packages("tibble", dependencies=TRUE, repos="https://cran.rstudio.com")
+install.packages(c("Lahman", "nycflights13", "gapmidner"))
+library(tidyverse)
 ### 1.dplyr소개   ##############################################################
 ##주로 데이터 전처리 과정에서 자주 사용
 ##데이터 전처리는 연구의 분석 목적에 따라 데이터를 재구조화, 

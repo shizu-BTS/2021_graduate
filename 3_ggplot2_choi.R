@@ -34,31 +34,27 @@ examData <- read.delim("Exam Anxiety.dat",  header = TRUE)
 names(examData)
 str(examData)
 
+
+##aes는 그래프별로 별도 지정하거나, 한꺼번에 지정할 수 있음
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam))
+
 ggplot(examData, aes(Anxiety, Exam))+
   geom_point()
 
 
-a<-ggplot(examData, aes(Anxiety, Exam))
-a+geom_point()
-
-a<-ggplot(examData, aes(Anxiety, Exam))+
-  geom_point()
-
-aes(Anxiety, Exam, colour=Gender)
-
 #Simple scatter
-scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))+
-  geom_point()
-scatter
 
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + geom_point(shape=19, size=1, colour="black")
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam, colour = Gender))
 
-scatter <- ggplot(examData, aes(Anxiety, Exam, colour=Gender))
-scatter + geom_point(shape=19, size=1)
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam), shape=19, size=1, colour="black")
 
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam, colour = Gender), size=1, shape=10)
 
-#plot symbol(points)
+#plot symbol(points) +refer to cheetsheet
 help(pch)
 
 
@@ -67,97 +63,75 @@ help(pch)
 #Simple scatter / labs(x=“x축 이름”, y=“y축이름“) /ggtitle("title")
 
 
-ggplot(examData, aes(Anxiety, Exam))+ 
-  geom_point() + 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
-  ggtitle("exam anxiety")
+ggplot(examData)+ 
+  geom_point(aes(x=Anxiety, y=Exam)) + 
+  labs(title="exam", x = "Exam Anxiety", y = "Exam Performance %")
 
 #data labeling 
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + 
-  geom_point() + 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
-  ggtitle("exam anxiety")+
-  geom_text(aes(label=Code, size=10, vjust=2, hjust=0)) #vjust : 위로, hjust : 오른쪽
+ggplot(examData)+ 
+  geom_point(aes(x=Anxiety, y=Exam)) + 
+  labs(title="exam", x = "Exam Anxiety", y = "Exam Performance %")+
+  geom_text(aes(label=Code, size=10, vjust=2, hjust=0))#vjust : 위로, hjust : 오른쪽
 
 #shape별 value를 알고 싶을때
 help(geom_text)
 
 
 ##집단별 색깔을 달리한 scatter plot
-
 scatter <- ggplot(examData, aes(x=Anxiety, y=Exam, colour=Gender))
 scatter + 
   geom_point() + 
   labs(x = "Exam Anxiety", y = "Exam Performance %") + 
   ggtitle("exam anxiety")
 
-##aes(변수명)는 해당 graph 그리는데 각각 삽입해서 사용도 가능
-ggplot(examData, aes(x=Anxiety, y=Exam))+
-  geom_point(aes(colour=Gender)) + 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
-  ggtitle("exam anxiety")
-
-##집단별 모양을 달리한 scatter plot
-ggplot(examData, aes(x=Anxiety, y=Exam, shape=Gender))+
-  geom_point() + 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
-  ggtitle("exam anxiety")
-
-ggplot(examData, aes(x=Anxiety, y=Exam))+
-  geom_point(aes(shape=Gender)) + 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
-  ggtitle("exam anxiety")
-
-
 
 
 ##집단별 층위를 나누어서 산포도를 그릴때
 
-ggplot(examData, aes(x=Anxiety, y=Exam))+
-  geom_point() + 
-  facet_grid(Gender~.)+
-  labs(x = "Exam Anxiety", y = "Exam Performance %") + 
-  ggtitle("exam anxiety")
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam)) + 
+  facet_grid(Gender~.)+ #row로 구분. 점의 위치를 확인할것
+  labs(title= "exam anxiety", x = "Exam Anxiety", y = "Exam Performance %")
+
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam)) + 
+  facet_grid(.~Gender)+ #column으로 구분
+  labs(title= "exam anxiety", x = "Exam Anxiety", y = "Exam Performance %") 
+#두변수의 조합으로 면 분할을 하고싶으면 A~B의 형태로 옵션 지정
 
 #Simple scatter with smooth/ 
 ggplot(examData, aes(Anxiety, Exam))+
   geom_point() + 
   geom_smooth() +  # 데이터를 잘설명할 수 있는 smooth line 생성
-  labs(x = "Exam Anxiety", y = "Exam Performance %")+ 
-  ggtitle("exam anxiety")
+  labs(title= "exam anxiety", x = "Exam Anxiety", y = "Exam Performance %") 
 
 
 #Simple scatter with regression line(red)
 ggplot(examData, aes(Anxiety, Exam))+
   geom_point() + 
   geom_smooth(method = "lm", colour = "Red", se = F) + #se=standard error(표준오차)
-  labs(x = "Exam Anxiety", y = "Exam Performance %") 
+  labs(title= "exam anxiety", x = "Exam Anxiety", y = "Exam Performance %") 
 
 
 #Simple scatter with regression line(red)+ CI(confidential interval(신뢰구간))
 
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + geom_point() + 
+ggplot(examData, aes(Anxiety, Exam))+
+  geom_point() + 
   geom_smooth(method = "lm", colour = "Red")+ 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") 
+  labs(title= "exam anxiety", x = "Exam Anxiety", y = "Exam Performance %") 
 
 
 #Simple scatter with regression line + coloured CI (alpha=transparancy)
-scatter <- ggplot(examData, aes(Anxiety, Exam))
-scatter + geom_point() + 
+ggplot(examData, aes(Anxiety, Exam))+ 
+  geom_point() + 
   geom_smooth(method = "lm", colour = "Red", fill="Red", alpha = 0.1) + 
-  labs(x = "Exam Anxiety", y = "Exam Performance %") 
+  labs(title= "exam anxiety", x = "Exam Anxiety", y = "Exam Performance %") 
 
 
 #Grouped scatter with regression line + CI
-
-scatter <- ggplot(examData, aes(Anxiety, Exam, colour = Gender))
-scatter + geom_point() + geom_smooth(method = "lm", aes(fill = Gender), alpha = 0.1) + labs(x = "Exam Anxiety", y = "Exam Performance %", colour = "Gender") 
-
-ggplot(examData, aes(Anxiety, Exam))+ 
-  geom_point(aes(colour=Gender)) + 
-  geom_smooth(method = "lm", aes(fill = Gender), alpha = 0.1) + 
+ggplot(examData)+
+  geom_point(aes(x=Anxiety, y=Exam, colour = Gender)) +
+  geom_smooth(method = "lm", color="grey", aes(x=Anxiety, y=Exam, fill = Gender), alpha = 0.1) +
   labs(x = "Exam Anxiety", y = "Exam Performance %", colour = "Gender") 
 
 ##(학생실습과제)
@@ -166,7 +140,8 @@ ggplot(examData, aes(Anxiety, Exam))+
 ## 2) 산포도와 함께 회귀선 그리기(Rating_Type에 따라 회귀선 색상 다르게, method는 lm으로)
 ## 3) 그림 title은 "geom_smooth(aes(colour = Rating_Type))" 으로 제시
 
-  #--------HISTOGRAM------------------------------------------------------
+
+#--------HISTOGRAM------------------------------------------------------
 
 ##Load the data file into R. This is a tab-delimited file hence use of read.delim
 
@@ -174,46 +149,57 @@ festivalData <- read.delim("DownloadFestival.dat",  header = TRUE)
 str(festivalData)
 
 ##Histogram with Outlier
-ggplot(festivalData, aes(day1)) + 
+
+ggplot(festivalData) + 
+  geom_histogram(aes(day1), binwidth = 0.1) + #binwidth를 0.2, 0.3등으로 변경해보자
   labs(legend.position="none")+ 
-  geom_histogram(binwidth = 0.4) + 
   labs(x = "Hygiene (Day 1 of Festival)", y = "Frequency")
+
 
 #1 outlier cased떄문에 그래프가 이상한걸 확인
 festivalData %>% 
   arrange(-day1) ->festvalData_a
 
-
 festivalData2 = read.delim("DownloadFestival(No Outlier).dat",  header = TRUE)
 
-ggplot(festivalData2, aes(day1))+
-  geom_histogram(binwidth=0.4)+
+ggplot(festivalData2)+
+  geom_histogram(aes(day1), binwidth=0.4, color="red")+
   labs(x="Hygiene of Day 1", y="Frequency")
 
 #Density without outlier(추가)
-ggplot(festivalData2, aes(day1))+
-  geom_density() +
+ggplot(festivalData2)+
+  geom_density(aes(day1), color="red") +
   labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
 
 #집단별로 색깔 다르게, alpha=투명도
-ggplot(festivalData2, aes(day1)) + 
-  geom_density(aes(fill = gender), alpha = 0.3) + 
+ggplot(festivalData2) + 
+  geom_density(aes(x=day1, fill = gender), alpha = 0.3) + 
+  labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
+
+ggplot(festivalData2)+
+  geom_histogram(aes(day1, fill=gender), alpha=0.3) +
+  labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
+
+##면분할을 해보면(facet_grid)
+
+ggplot(festivalData2)+
+  geom_histogram(aes(day1), alpha=0.3) +
+  facet_grid(.~gender)
   labs(x = "Hygiene (Day 1 of Festival)", y = "Density Estimate")
 
 #--------BOXPLOTS----------
 
-ggplot(festivalData, aes(gender, day1))+
-  geom_boxplot() + 
+ggplot(festivalData)+
+  geom_boxplot(aes(x=gender, y=day1)) + 
   labs(x = "Gender", y = "Hygiene (Day 1 of Festival)")
 
 #with outlier removed
 
 festivalData2 = read.delim("DownloadFestival(No Outlier).dat",  header = TRUE)
 
-ggplot(festivalData2, aes(gender, day1))+
-  geom_boxplot() + 
+ggplot(festivalData2)+
+  geom_boxplot(aes(x=gender, y=day1)) + 
   labs(x = "Gender", y = "Hygiene (Day 1 of Festival)")
-
 
 ##(학생실습과제) days 2 and 3 각각 box plot 그려보기##
 
@@ -223,62 +209,122 @@ ggplot(festivalData2, aes(gender, day1))+
 
 chickFlick = read.delim("ChickFlick.dat",  header = TRUE)
 str(chickFlick)
-ggplot(chickFlick, aes(film, arousal))+
-  geom_point()+
+
+ggplot(chickFlick)+
+  geom_point(aes(film, arousal))+
   labs(x = "Film", y = "Arousal") 
 
-ggplot(chickFlick, aes(film, arousal))+
-  geom_boxplot()+
-  labs(x = "Film", y = "Arousal") 
-
-ggplot(chickFlick, aes(film, arousal))+
-  stat_summary(fun.y = mean, geom = "bar", fill = "pink", colour = "Black")+
-  geom_point()+
+ggplot(chickFlick)+
+  geom_boxplot(aes(film, arousal))+
   labs(x = "Film", y = "Arousal") 
 
 
+ggplot(chickFlick)+
+  stat_summary(
+    aes(film, arousal), 
+    fun.y = mean, 
+    geom = "bar", 
+    fill = "pink", 
+    colour = "Black")+
+  geom_point(aes(film, arousal))+
+  labs(x = "Film", y = "Arousal") 
+
+#stat과 geom의 관계를 이해. 모든 geom에서 stat을 쓸수도, 모든 stat에서 geom을 쓸수도, 아니면 stat_summary를 이용하는 방법도 있음
+str(examData)
+ggplot(examData)+
+  stat_count(aes(Gender))
+
+ggplot(examData)+
+  geom_bar(aes(Gender))
+
+?geom_bar  #기본stat이 count인것을 확인할 수 있음
+
+ggplot(examData)+
+  geom_bar(aes(x=Gender, y=Exam), stat="identity")
+
+ggplot(chickFlick)+
+  stat_summary(
+    aes(film, arousal), 
+    fun.y = mean, 
+    geom = "bar", 
+    fill = "pink", 
+    colour = "Black")+
+  geom_point(aes(film, arousal))+
+  labs(x = "Film", y = "Arousal") 
+
+
 ggplot(chickFlick, aes(film, arousal))+
-  stat_summary(fun.y = mean, geom = "bar", fill = "White", colour = "Black") + 
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar") +
+  stat_summary(
+    fun.y = mean, 
+    geom = "bar",
+    width=0.4,
+    fill = "White", 
+    colour = "Black") + 
+  stat_summary(
+    fun.data = mean_cl_normal, 
+    geom = "errorbar", 
+    width=0.4, 
+    color="Red") +
   labs(x = "Film", y = "Mean Arousal") 
 
-ggplot(chickFlick, aes(film, arousal, fill = gender ))+
-  stat_summary(fun.y = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.90), width = 0.2) + 
+##position dodge
+
+ggplot(chickFlick)+
+  stat_summary(
+    aes(film, arousal, fill = gender),
+    fun.y = mean, 
+    geom = "bar", 
+    position="dodge") +
+  stat_summary(
+    aes(film, arousal, color=gender),  #fill=gender로 했을때 작동하지 않는것 확인
+    fun.data = mean_cl_normal, 
+    geom = "errorbar", 
+    position=position_dodge(width=0.90),  #dodge position의 width, 0.1로 변경해서 확인 
+    width = 0.1) + #binwidth옵션임 =0.4로 변경해서 확인
   labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
-ggplot(chickFlick, aes(film, arousal, fill = gender ))+
-  stat_summary(fun.y = mean, geom = "bar", position="dodge") +#positionn=dodge: 집단에 따라 그래프를 분리
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
-  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
-
-
-ggplot(chickFlick, aes(film, arousal, fill = gender ))+
-  stat_summary(fun.y = mean, geom = "bar", position="dodge") +#positionn=dodge: 집단에 따라 그래프를 분리
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
-  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
 ##ggplot 안에 aes(colour=gender)를 두었을때와 외부에 두었을때의 차이
-ggplot(chickFlick, aes(film, arousal))+
-  stat_summary(fun.y = mean, geom = "bar", aes(fill=gender), position="dodge") +#position=dodge: 집단에 따라 그래프를 분리
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", position=position_dodge(width=0.9), width = 0.1) + 
+ggplot(chickFlick, aes(film, arousal, fill=gender))+
+  stat_summary(
+    fun.y = mean, 
+    geom = "bar", 
+    position="dodge") +
+  stat_summary(
+    fun.data = mean_cl_normal, 
+    geom = "errorbar", 
+    position=position_dodge(width=0.90),   
+    width = 0.1) +
   labs(x = "Film", y = "Mean Arousal", fill = "Gender")
 
-ggplot(chickFlick, aes(film, arousal))+
-  stat_summary(f un.y = mean, geom = "bar", aes(fill=gender), position="dodge") +#position=dodge: 집단에 따라 그래프를 분리
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", aes(line=gender), position=position_dodge(width=0.9), width = 0.1) + 
-  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
-
-
+##facet_wrap과 facet_grid의 차이
+#facet grid : combinations of two var. display all facet even if some are empty
+#facet_wrap : 1 var. 만일 two variable일때는 rectangular facet으로 각각 구분
 
  ggplot(chickFlick, aes(film, arousal, fill = film))+
-   stat_summary(fun.y = mean, geom = "bar") + 
-   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) + 
+   stat_summary(
+     fun.y = mean, 
+     geom = "bar") + 
+   stat_summary(
+     fun.data = mean_cl_normal, 
+     geom = "errorbar", 
+     width = 0.2) + 
    facet_wrap(~gender) + #facet_wrap(~) : 변수로 감싸주는 방식으로 그래프 분리
    labs(x = "Film", y = "Mean Arousal") + 
    theme(legend.position="none")##theme : legend, axis, panel 등 다양한 옵션 변경 가능
  
-
+ ggplot(chickFlick, aes(film, arousal, fill = film))+
+   stat_summary(
+     fun.y = mean, 
+     geom = "bar") + 
+   stat_summary(
+     fun.data = mean_cl_normal, 
+     geom = "errorbar", 
+     width = 0.2) + 
+   facet_grid(gender~.) + #facet_wrap(~) : 변수로 감싸주는 방식으로 그래프 분리
+   labs(x = "Film", y = "Mean Arousal") + 
+   theme(legend.position="none")##theme : legend, axis, panel 등 다양한 옵션 변경 가능
+ 
 
  
 ##(학생실습과제) chickFlick 자료, x축 film, y축 arousal.
@@ -299,7 +345,7 @@ str(hiccups)
 hiccups$Intervention_Factor<-factor(hiccups$Intervention, levels(hiccups$Intervention)[c(1, 4, 2, 3)])
 str(hiccups)
 
-410000000211224
+
 line <- ggplot(hiccups,  aes(Intervention_Factor, Hiccups))
 line + stat_summary(fun.y = mean, geom = "point") + stat_summary(fun.y = mean, geom = "line", aes(group = 1),colour = "Red", linetype = "dashed") + stat_summary(fun.data = mean_cl_boot, geom = "errorbar", width = 0.2) + labs(x = "Intervention", y = "Mean Number of Hiccups")
 
