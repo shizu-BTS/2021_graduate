@@ -19,6 +19,15 @@ library(tibble)
 install.packages("tibble", dependencies=TRUE, repos="https://cran.rstudio.com")
 install.packages(c("Lahman", "nycflights13", "gapmidner"))
 library(tidyverse)
+
+##패키지 인스톨 과정에서 문제 발생시 dependecy 문제일 가능성이 있음. 가능하면 모든 패키지를 업데이트 하거나, R을 업데이트하는 것을 추천
+##R 업데이트 시 R gui를 열어서 해당 코드를 실행하는 것을 추천함
+
+update.packages(checkBuilt=TRUE, ask=FALSE)
+
+install.packages("installr")
+installr::updateR()
+
 ### 1.dplyr소개   ##############################################################
 ##주로 데이터 전처리 과정에서 자주 사용
 ##데이터 전처리는 연구의 분석 목적에 따라 데이터를 재구조화, 
@@ -64,15 +73,16 @@ help(abs)
 
 ##분석에 앞서서 R 내장 데이터를 불러오자
 
-install.packages("nycflights13")
-library(nycflights13)
+install.packages("nycflights13", dependencies=TRUE)
+install.packages("dplyr", dependencies=TRUE)
 library(dplyr)
+library(nycflights13)
 head(flights) # head 자료 수개를 보여줌
 flight_df <-data.frame(flights) #data frame으로 변환
 #시작하기 전에 데이터구조 파악 필수! : 데이터가 336776개, 19개의 변수가 있는 비행기 출도착 관련
 str(flight_df)
-
-
+install.packages("ellipsis")
+install.packages("Rtools")
 
 ##month=2인 자료만 subset
 flight_df %>% 
@@ -80,7 +90,6 @@ flight_df %>%
   count(month)
 
 table(flight_df$month)
-
 
 ##month=2 or day=1  자료만 subset
 flight_df %>% 
@@ -148,7 +157,12 @@ select_flight_df<-
   flight_df %>%
   select(-c(year, month)) #year, month 변수 제외하고 선택
 
+##특정변수를 앞으로 옮기소 싶을때
+select_flight_df<-
+  flight_df %>%
+  select(year)
 
+str(flight_df)
 ### 3.3.arrange #######################################################
 ##arrange는 정렬 기능(특정변수(들) 기준으로 오름차순 또는 내림차순으로 정렬)
 

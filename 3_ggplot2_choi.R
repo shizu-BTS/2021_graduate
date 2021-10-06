@@ -400,7 +400,7 @@ table(Cars93_df_se$Type)
 
 Cars93_df_se %>% 
   ggplot(.,aes(x=Max.Price, y=reorder(Model,Max.Price), shape=Type))+
-  geom_point(size=3, colour="blue")+
+  geom_point(size=3, colour="grey")+
   theme_bw()+ #background 색 없앰
   theme(panel.grid.major.x=element_blank(), #x축 선 없애기
         panel.grid.minor.x=element_blank(), 
@@ -420,4 +420,80 @@ Cars93_df_se %>%
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor.y = element_blank())+
   facet_grid(Type~.,scales="free_y", space="free_y")+
+  ggtitle("cleveland dot plot with facets")
+
+
+###
+library(tidyverse)
+install.packages("babynames")
+library(babynames)
+str(babynames)
+
+top_names<-
+  babynames %>% 
+  filter(year >=1950, year <1990) %>% 
+  mutate(decade=(year %/% 10)*10) %>% 
+  group_by(decade) %>% 
+  count(name, wt=n, sort=TRUE) %>% 
+  ungroup
+
+str(top_names)
+
+
+
+top_names %>% 
+  group_by(decade) %>% 
+  top_n(15) %>% 
+  ungroup %>%
+  mutate(decade=as.factor(decade)) %>% 
+  ggplot(aes(name, n, fill=decade))+ 
+  geom_col()+
+  facet_wrap(~decade, scales="free_y")+
+  coord_flip()+
+  scale_y_continuous(expand=c(0,0))
+
+###위의 그래프를 연도별 빈도가 높은 이름 순으로 정렬하여 보여주고 싶다면?
+install.packages("tidytext")
+library(tidytext)
+
+top_names %>% 
+  group_by(decade) %>% 
+  top_n(15) %>% 
+  ungroup %>%
+  mutate(decade=as.factor(decade),
+         name= reorder_within(name, n, decade)) %>%  ##reorder_within(order할 변수, order 기준, within 기준) 
+  ggplot(aes(name, n, fill=decade))+ 
+  geom_col()+
+  facet_wrap(~decade, scales="free_y")+
+  coord_flip()+
+  scale_x_reordered()
+  scale_y_continuous(expand=c(0,0))
+
+  
+##다시 cars93으로 돌아와서 reorder_within을 이용해서 tidy하게 바꿔보자
+str(Cars93_df_se)
+
+Cars93_df_se %>%
+  mutate(Model=reorder_within(Model, Max.Price, Type)) %>% 
+  ggplot(aes(x=Max.Price, y=Model))+
+  geom_point(size= 2, aes(color=Type))+
+  facet_grid(Type~.,scales="free_y", space="free_y")+
+  scale_x_reordered()+
+  ggtitle("cleveland dot plot with facets")+
+  theme_bw()+
+  theme(panel.grid.major.y = element_blank(), 
+        panel.grid.minor.y = element_blank())
+  
+
+
+
+Cars93_df_se %>%
+  group_by(Type) %>% 
+  top_n(n=5, wt=Max.Price) %>%
+  ungroup %>% 
+  mutate(Model=reorder_within(Model, Max.Price, Type)) %>% 
+  ggplot(aes(x=Max.Price, y=Model))+
+  geom_point(size= 2, aes(color=Type))+
+  facet_grid(Type~.,scales="free_y", space="free_y")+
+  scale_x_reordered()+
   ggtitle("cleveland dot plot with facets")
