@@ -14,7 +14,8 @@
 
 #If you don't have ggplot2 installed then use:
 install.packages(c("ggplot2", "plyr", "reshape"))
-
+install.packages("Hmisc")
+install.pacakges("Rtool")
 
 #Initiate ggplot2
 library(ggplot2)
@@ -36,6 +37,12 @@ str(examData)
 
 
 ##aes는 그래프별로 별도 지정하거나, 한꺼번에 지정할 수 있음
+ggplot(examData, aes(Anxiety, Exam))+
+  geom_point()+
+  geom_smooth()+
+  
+  
+
 ggplot(examData)+
   geom_point(aes(x=Anxiety, y=Exam))
 
@@ -241,6 +248,12 @@ ggplot(examData)+
 
 ggplot(examData)+
   geom_bar(aes(x=Gender, y=Exam), stat="identity")
+ 
+
+                  브릿지 존스\   메멘토
+평균 arrousal        19.5         23.2
+
+
 
 ggplot(chickFlick)+
   stat_summary(
@@ -267,22 +280,11 @@ ggplot(chickFlick, aes(film, arousal))+
     color="Red") +
   labs(x = "Film", y = "Mean Arousal") 
 
+install.packages("Hmisc", dependencies=TRUE, repos="https://cran.rstudio.com")
+library(Hmisc)
 ##position dodge
 
-ggplot(chickFlick)+
-  stat_summary(
-    aes(film, arousal, fill = gender),
-    fun.y = mean, 
-    geom = "bar", 
-    position="dodge") +
-  stat_summary(
-    aes(film, arousal, color=gender),  #fill=gender로 했을때 작동하지 않는것 확인
-    fun.data = mean_cl_normal, 
-    geom = "errorbar", 
-    position=position_dodge(width=0.90),  #dodge position의 width, 0.1로 변경해서 확인 
-    width = 0.1) + #binwidth옵션임 =0.4로 변경해서 확인
-  labs(x = "Film", y = "Mean Arousal", fill = "Gender")
-
+1
 
 ##ggplot 안에 aes(colour=gender)를 두었을때와 외부에 두었을때의 차이
 ggplot(chickFlick, aes(film, arousal, fill=gender))+

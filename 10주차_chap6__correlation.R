@@ -58,6 +58,7 @@ adverts<-c(5,4,4,6,8)
 packetsNA<-c(8,9,10,NA,15)
 age<-c(5, 12, 16, 9, 14)
 advertNA<-data.frame(adverts, packetsNA, age)
+
 cor(advertNA, use = "everything",  method = "pearson")  # everything = missing value 있는 경우 상관계수가 NA로 산출됨
 cor(advertNA, use = "complete.obs",  method = "pearson")
 cor(advertNA, use = "pairwise.complete.obs",  method = "pearson")
@@ -73,6 +74,7 @@ examData = read.delim("Exam Anxiety.dat",  header = TRUE)
 examData
 ## use= 결측값 처리   everything(default) 결측값이 있으면 NA로 계산, all.obs=결측값 있으면 오류, complete.obs= 결측값이 있는 케이스 모두 제거, pairwise.compete.obs= 상관계수가 계산되는 변수들 가운데 결측값 있는 케이스만 제거
 
+cor(examData)
 cor(examData$Exam, examData$Anxiety, use = "complete.obs", method = 'pearson')
 examData2 <- examData[, c("Exam", "Anxiety", "Revise")]
 cor(examData2)

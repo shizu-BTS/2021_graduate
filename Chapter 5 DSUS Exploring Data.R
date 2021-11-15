@@ -28,7 +28,7 @@ library(car)
 library(ggplot2)
 library(pastecs)
 library(psych)
-library(Rcmdr)
+
 
 #Read in the download data:
 
@@ -43,50 +43,57 @@ dlf$day1 <- ifelse(dlf$day1 > 20, NA, dlf$day1)
 
 #Histogram for day 1:
 
-hist.day1 <- ggplot(dlf, aes(day1)) + opts(legend.position = "none") + geom_histogram(aes(y=..density..), colour="black", fill="white") + labs(x="Hygiene score on day 1", y = "Density")
+hist.day1 <- 
+  ggplot(dlf, aes(day1)) + 
+  labs(legend.position = "none") + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") + 
+  labs(x="Hygiene score on day 1", y = "Density")
 hist.day1
 
 #Histogram for day 2:
-hist.day2 <- ggplot(dlf, aes(day2)) + opts(legend.position = "none") + geom_histogram(aes(y=..density..), colour="black", fill="white") + labs(x="Hygiene score on day 2", y = "Density")
+hist.day2 <- 
+  ggplot(dlf, aes(day2)) + 
+  labs(legend.position = "none") + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") + 
+  labs(x="Hygiene score on day 2", y = "Density")
 hist.day2
 
 #Histogram for day 3:
 
-hist.day3 <- ggplot(dlf, aes(day3)) + opts(legend.position = "none") + geom_histogram(aes(y=..density..), colour="black", fill="white") + labs(x="Hygiene score on day 3", y = "Density")
+hist.day3 <- 
+  ggplot(dlf, aes(day3)) +
+  labs(legend.position = "none") + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") + 
+  labs(x="Hygiene score on day 3", y = "Density")
 hist.day3
 
 #Add the curves to the Histograms:
 
-hist.day1 + stat_function(fun = dnorm, args = list(mean = mean(dlf$day1, na.rm = TRUE), sd = sd(dlf$day1, na.rm = TRUE)), colour = "black", size = 1)
-
-ggsave(file = paste(imageDirectory,"05 DLF Day 1 Hist.png",sep="/"))
+hist.day1 + 
+  stat_function(fun = dnorm, args = list(mean = mean(dlf$day1, na.rm = TRUE), sd = sd(dlf$day1, na.rm = TRUE)), colour = "black", size = 1)
 
 hist.day2 + stat_function(fun = dnorm, args = list(mean = mean(dlf$day2, na.rm = TRUE), sd = sd(dlf$day2, na.rm = TRUE)), colour = "black", size = 1)
 
-ggsave(file = paste(imageDirectory,"05 DLF Day 2 Hist.png",sep="/"))
-
 
 hist.day3 + stat_function(fun = dnorm, args = list(mean = mean(dlf$day3, na.rm = TRUE), sd = sd(dlf$day3, na.rm = TRUE)), colour = "black", size = 1)
-
-ggsave(file = paste(imageDirectory,"05 DLF Day 3 Hist.png",sep="/"))
 
 
 #Q-Q plot for day 1:
 qqplot.day1 <- qplot(sample = dlf$day1, stat="qq")
 qqplot.day1
 
-ggsave(file = paste(imageDirectory,"05 DLF Day 1 QQ.png",sep="/"))
-
 #Q-Q plot for day 2:
 
 qqplot.day2 <- qplot(sample = dlf$day2, stat="qq")
 qqplot.day2
-ggsave(file = paste(imageDirectory,"05 DLF Day 2 QQ.png",sep="/"))
 
 #Q-Q plot of the hygiene scores on day 3:
 qqplot.day3 <- qplot(sample = dlf$day3, stat="qq")
 qqplot.day3
-ggsave(file = paste(imageDirectory,"05 DLF Day 3 QQ.png",sep="/"))
+##linear vs curve???
+
+
+
 
 #Quantifying normality with numbers
 library(psych)		#load the psych library, if you haven't already, for the describe() function.
@@ -100,13 +107,23 @@ describe(dlf[,c("day1", "day2", "day3")])
 
 library(pastecs)
 stat.desc(dlf$day1, basic = FALSE, norm = TRUE)
+stat.desc(dlf$day2, basic = FALSE, norm = TRUE)
+stat.desc(dlf$day3, basic = FALSE, norm = TRUE)
 
 stat.desc(cbind(dlf$day1, dlf$day2, dlf$day3), basic = FALSE, norm = TRUE)
-
+##norm=TRUE 확인!!!
+##cbind는 day1, day2, day3의 값을 한꺼번에 보기 위해 묶은것
 round(stat.desc(dlf[, c("day1", "day2", "day3")], basic = FALSE, norm = TRUE), digits = 3)
 
-
-
+shapiro.test(dlf$day1)
+#H0= normal distribution
+#H1= not normal distribution
+#  p-value 가 유의 확률 (0.05)보다 작다 . 따라서 H1 is accepted. 
+by(dlf$day1, dlf$gender, shapiro.test)
+leveneTest(dlf$day1, dlf$gender)
+#Ho=variances of each group are eqaul
+#H1=variances of each group are not eqaul
+#p<.05 -> H1 is accepted -> it means that variances are heterogeneous
 #Read in R exam data.
 rexam <- read.delim("rexam.dat", header=TRUE)
 
@@ -157,7 +174,7 @@ by(data=cbind(rexam$exam, rexam$computer, rexam$lectures, rexam$numeracy), rexam
 by(cbind(data=rexam$computer, data=rexam$lectures), rexam$uni, describe)
 by(rexam[, c("computer", "lectures")], rexam$uni, stat.desc, basic = FALSE, norm = TRUE)
 
-
+3.14*2^3*4/3
 
 #using subset to plot histograms for different groups:
 

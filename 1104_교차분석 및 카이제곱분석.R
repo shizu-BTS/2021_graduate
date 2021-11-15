@@ -12,6 +12,7 @@ setwd("C:\\Users\\shizu\\stat_2020")
 rm(list=ls())  #이전작업 객체 지우기
 
 install.packages("ggplot2")
+
 library(ggplot2)
 data(diamonds)
 data.frame(diamonds)
@@ -24,12 +25,12 @@ table(diamonds$color, diamonds$cut)
 # 2) 교차분할표 생성
 
 
-install.packages("gmodels")
+install.packages("gmodels", dependencies=TRUE)
 library(gmodels)
 
 CrossTable(x=diamonds$color, y=diamonds$cut)
 
-
+.libPaths()
 
 ## 3) 카이제곱 검정 :CrossTable() 이용 - 교차분석 + 가설검정
 ## p값이 통상 0.05 보다 작으면 관련성이 없다. 
