@@ -43,7 +43,7 @@ rstudent(pubReg)
 # see dubinwatson table (# of cases, # of ivs -> d통계량 cutoff)
 reg1 = residuals(pubReg)
 durbinWatsonTest(reg1)
-
+reg1
 # 잔차의 등분산성(그림)
 par(mfrow=c(2,2))
 plot(pubReg)
@@ -66,7 +66,8 @@ resid(pubReg)   ##y hat minus y
 rstandard(pubReg) # 표준화된 잔차(mu=0, sd=1), 절대값 2 이상이면 이상치
 rstudent(pubReg)
 
-
+summary(pubReg)
+lm.beta(pubReg)
 # 다중공선성 vif, tolerance
 #----Obtaining the VIF---
 vif(pubReg) ## 2개 이상의 독립변수인 경우 실행됨 (pubReg는 실행 안됨)
